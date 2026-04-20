@@ -8,7 +8,7 @@ Minimal iOS SwiftUI MVP prototype for a rally-style trip meter.
 - Current speed in mph
 - Pause/Resume tracking
 - Reset All
-- Manual Trip 1 adjustments (`-0.1`, `-0.01`, `+0.01`, `+0.1`)
+- Manual Trip 1 + Trip 2 adjustments (`-0.1`, `-0.01`, `+0.01`, `+0.1`)
 - GPS warning when incoming accuracy is poor
 - Distance filtering for weak/noisy points and tiny stationary drift
 

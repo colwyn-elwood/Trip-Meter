@@ -155,6 +155,11 @@ final class TripMeterViewModel: ObservableObject {
     func adjustTrip2(by deltaMiles: Double) {
         trip2Miles = max(0, trip2Miles + deltaMiles)
     }
+
+    func adjustTrips(by deltaMiles: Double) {
+        adjustTrip1(by: deltaMiles)
+        adjustTrip2(by: deltaMiles)
+    }
 }
 
 struct ContentView: View {
@@ -172,6 +177,9 @@ struct ContentView: View {
                     }
                     .accessibilityLabel("Trip 1 distance")
                     .accessibilityHint("Double tap to reset Trip 1")
+                    .accessibilityAction(named: "Reset Trip 1") {
+                        viewModel.resetTrip1()
+                    }
 
                 meterBlock(label: "TRIP 2", value: viewModel.trip2Miles)
                     .onLongPressGesture {
@@ -179,6 +187,9 @@ struct ContentView: View {
                     }
                     .accessibilityLabel("Trip 2 distance")
                     .accessibilityHint("Long press to reset Trip 2")
+                    .accessibilityAction(named: "Reset Trip 2") {
+                        viewModel.resetTrip2()
+                    }
 
                 VStack(spacing: 2) {
                     Text("SPEED")
@@ -197,14 +208,14 @@ struct ContentView: View {
                 }
 
                 HStack(spacing: 12) {
-                    Button("-0.1") { viewModel.adjustTrip1(by: -0.1) }
-                        .accessibilityLabel("Decrease Trip 1 by zero point one miles")
-                    Button("-0.01") { viewModel.adjustTrip1(by: -0.01) }
-                        .accessibilityLabel("Decrease Trip 1 by zero point zero one miles")
-                    Button("+0.01") { viewModel.adjustTrip1(by: 0.01) }
-                        .accessibilityLabel("Increase Trip 1 by zero point zero one miles")
-                    Button("+0.1") { viewModel.adjustTrip1(by: 0.1) }
-                        .accessibilityLabel("Increase Trip 1 by zero point one miles")
+                    Button("-0.1") { viewModel.adjustTrips(by: -0.1) }
+                        .accessibilityLabel("Decrease Trip 1 and Trip 2 by zero point one miles")
+                    Button("-0.01") { viewModel.adjustTrips(by: -0.01) }
+                        .accessibilityLabel("Decrease Trip 1 and Trip 2 by zero point zero one miles")
+                    Button("+0.01") { viewModel.adjustTrips(by: 0.01) }
+                        .accessibilityLabel("Increase Trip 1 and Trip 2 by zero point zero one miles")
+                    Button("+0.1") { viewModel.adjustTrips(by: 0.1) }
+                        .accessibilityLabel("Increase Trip 1 and Trip 2 by zero point one miles")
                 }
                 .buttonStyle(TripButtonStyle())
 
