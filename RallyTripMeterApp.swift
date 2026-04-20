@@ -207,6 +207,8 @@ struct ContentView: View {
                         .foregroundColor(.white)
                         .monospacedDigit()
                 }
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Current speed \(viewModel.currentSpeedMPH, specifier: "%.1f") miles per hour")
 
                 if viewModel.gpsWarning {
                     Text("GPS signal weak — accuracy reduced")
@@ -217,12 +219,16 @@ struct ContentView: View {
                 HStack(spacing: 12) {
                     Button("-0.1") { viewModel.adjustBothTrips(by: -0.1) }
                         .accessibilityLabel("Decrease Trip 1 and Trip 2 by one tenth of a mile")
+                        .accessibilityHint("Applies a negative one tenth mile correction")
                     Button("-0.01") { viewModel.adjustBothTrips(by: -0.01) }
                         .accessibilityLabel("Decrease Trip 1 and Trip 2 by one hundredth of a mile")
+                        .accessibilityHint("Applies a negative one hundredth mile correction")
                     Button("+0.01") { viewModel.adjustBothTrips(by: 0.01) }
                         .accessibilityLabel("Increase Trip 1 and Trip 2 by one hundredth of a mile")
+                        .accessibilityHint("Applies a positive one hundredth mile correction")
                     Button("+0.1") { viewModel.adjustBothTrips(by: 0.1) }
                         .accessibilityLabel("Increase Trip 1 and Trip 2 by one tenth of a mile")
+                        .accessibilityHint("Applies a positive one tenth mile correction")
                 }
                 .buttonStyle(TripButtonStyle())
 
@@ -230,9 +236,13 @@ struct ContentView: View {
                     Button(viewModel.isPaused ? "Resume" : "Pause") {
                         viewModel.togglePause()
                     }
+                    .accessibilityLabel(viewModel.isPaused ? "Resume tracking" : "Pause tracking")
+                    .accessibilityHint("Toggles live GPS trip accumulation")
                     Button("Reset All") {
                         viewModel.resetAll()
                     }
+                    .accessibilityLabel("Reset both trips")
+                    .accessibilityHint("Sets Trip 1 and Trip 2 to zero")
                 }
                 .buttonStyle(TripButtonStyle())
             }
