@@ -8,7 +8,7 @@ private enum TripMeterConstants {
     static let stationaryJitterThresholdMeters: CLLocationDistance = 1.5
     static let metersToMiles = 0.000621371
     static let metersPerSecondToMilesPerHour = 2.23694
-    static let maxSanityCheckSpeedMetersPerSecond: CLLocationSpeed = 70
+    static let speedCapMetersPerSecond: CLLocationSpeed = 70
     static let fallbackDistanceThresholdMeters: CLLocationDistance = 3
 }
 
@@ -95,7 +95,7 @@ final class LocationManager: NSObject, ObservableObject, CLLocationManagerDelega
         }
 
         previousValidLocation = location
-        let fallbackSpeed = min(distance / elapsed, TripMeterConstants.maxSanityCheckSpeedMetersPerSecond)
+        let fallbackSpeed = min(distance / elapsed, TripMeterConstants.speedCapMetersPerSecond)
         currentSpeedMetersPerSecond = measuredSpeed > 0 ? measuredSpeed : fallbackSpeed
         distanceIncrementMeters = distance
     }
@@ -163,7 +163,7 @@ final class TripMeterViewModel: ObservableObject {
         trip2Miles = max(0, trip2Miles + deltaMiles)
     }
 
-    func adjustTrips(by deltaMiles: Double) {
+    func adjustBothTrips(by deltaMiles: Double) {
         adjustTrip1(by: deltaMiles)
         adjustTrip2(by: deltaMiles)
     }
@@ -215,13 +215,13 @@ struct ContentView: View {
                 }
 
                 HStack(spacing: 12) {
-                    Button("-0.1") { viewModel.adjustTrips(by: -0.1) }
+                    Button("-0.1") { viewModel.adjustBothTrips(by: -0.1) }
                         .accessibilityLabel("Decrease Trip 1 and Trip 2 by one tenth of a mile")
-                    Button("-0.01") { viewModel.adjustTrips(by: -0.01) }
+                    Button("-0.01") { viewModel.adjustBothTrips(by: -0.01) }
                         .accessibilityLabel("Decrease Trip 1 and Trip 2 by one hundredth of a mile")
-                    Button("+0.01") { viewModel.adjustTrips(by: 0.01) }
+                    Button("+0.01") { viewModel.adjustBothTrips(by: 0.01) }
                         .accessibilityLabel("Increase Trip 1 and Trip 2 by one hundredth of a mile")
-                    Button("+0.1") { viewModel.adjustTrips(by: 0.1) }
+                    Button("+0.1") { viewModel.adjustBothTrips(by: 0.1) }
                         .accessibilityLabel("Increase Trip 1 and Trip 2 by one tenth of a mile")
                 }
                 .buttonStyle(TripButtonStyle())
