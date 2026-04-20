@@ -8,6 +8,7 @@ private enum TripMeterConstants {
     static let stationaryJitterThresholdMeters: CLLocationDistance = 1.5
     static let metersToMiles = 0.000621371
     static let metersPerSecondToMilesPerHour = 2.23694
+    static let maxReasonableSpeedMetersPerSecond: CLLocationSpeed = 70
 }
 
 final class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
@@ -87,7 +88,8 @@ final class LocationManager: NSObject, ObservableObject, CLLocationManagerDelega
         }
 
         previousValidLocation = location
-        currentSpeedMetersPerSecond = measuredSpeed > 0 ? measuredSpeed : distance / elapsed
+        let fallbackSpeed = min(distance / elapsed, TripMeterConstants.maxReasonableSpeedMetersPerSecond)
+        currentSpeedMetersPerSecond = measuredSpeed > 0 ? measuredSpeed : fallbackSpeed
         distanceIncrementMeters = distance
     }
 }
@@ -149,6 +151,10 @@ final class TripMeterViewModel: ObservableObject {
     func adjustTrip1(by deltaMiles: Double) {
         trip1Miles = max(0, trip1Miles + deltaMiles)
     }
+
+    func adjustTrip2(by deltaMiles: Double) {
+        trip2Miles = max(0, trip2Miles + deltaMiles)
+    }
 }
 
 struct ContentView: View {
@@ -164,11 +170,15 @@ struct ContentView: View {
                     .onTapGesture {
                         viewModel.resetTrip1()
                     }
+                    .accessibilityLabel("Trip 1 distance")
+                    .accessibilityHint("Double tap to reset Trip 1")
 
                 meterBlock(label: "TRIP 2", value: viewModel.trip2Miles)
                     .onLongPressGesture {
                         viewModel.resetTrip2()
                     }
+                    .accessibilityLabel("Trip 2 distance")
+                    .accessibilityHint("Double tap and hold to reset Trip 2")
 
                 VStack(spacing: 2) {
                     Text("SPEED")
