@@ -178,7 +178,7 @@ struct ContentView: View {
                         viewModel.resetTrip2()
                     }
                     .accessibilityLabel("Trip 2 distance")
-                    .accessibilityHint("Double tap and hold to reset Trip 2")
+                    .accessibilityHint("Long press to reset Trip 2")
 
                 VStack(spacing: 2) {
                     Text("SPEED")
@@ -198,9 +198,13 @@ struct ContentView: View {
 
                 HStack(spacing: 12) {
                     Button("-0.1") { viewModel.adjustTrip1(by: -0.1) }
+                        .accessibilityLabel("Decrease Trip 1 by zero point one miles")
                     Button("-0.01") { viewModel.adjustTrip1(by: -0.01) }
+                        .accessibilityLabel("Decrease Trip 1 by zero point zero one miles")
                     Button("+0.01") { viewModel.adjustTrip1(by: 0.01) }
+                        .accessibilityLabel("Increase Trip 1 by zero point zero one miles")
                     Button("+0.1") { viewModel.adjustTrip1(by: 0.1) }
+                        .accessibilityLabel("Increase Trip 1 by zero point one miles")
                 }
                 .buttonStyle(TripButtonStyle())
 
