@@ -142,8 +142,8 @@ final class TripMeterViewModel: ObservableObject {
     }
 
     func resetAll() {
-        trip1Miles = 0
-        trip2Miles = 0
+        resetTrip1()
+        resetTrip2()
     }
 
     func adjustTrip1(by deltaMiles: Double) {
